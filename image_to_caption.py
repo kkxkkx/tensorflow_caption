@@ -20,6 +20,25 @@ from caption.generated import test_gen
 
 
 class Caption(object):
+    def __init__(self):
+        # 图片的channel为3
+        channel = 3
+        # 设置模型权重的地址
+        model_weights_path = os.path.join('models', best_model)
+        print('模型加载中...')
+        # 创建模型
+        model = build_model()
+        # 加载模型权重
+        model.load_weights(model_weights_path)
+        print('模型加载完毕...')
+
+        # print(model.summary())
+        # 加载语料库
+        vocab = pickle.load(open('data/vocab_train.p', 'rb'))
+        # 将word转化为数字  方便输入网络 进行预测
+        idx2word = sorted(vocab)
+        word2idx = dict(zip(idx2word, range(len(vocab))))
+        print('语料库加载完毕...')
 
     # 使用训练好的模型对图片进行测试
     def beam_search_predictions(self, model, image_name, word2idx, idx2word, encoding_test, beam_index=3):
@@ -71,24 +90,6 @@ class Caption(object):
         return final_caption
 
     def ImageCaption(self, image_name):
-        # 图片的channel为3
-        channel = 3
-        # 设置模型权重的地址
-        model_weights_path = os.path.join('models', best_model)
-        print('模型加载中...')
-        # 创建模型
-        model = build_model()
-        # 加载模型权重
-        model.load_weights(model_weights_path)
-        print('模型加载完毕...')
-
-        # print(model.summary())
-        # 加载语料库
-        vocab = pickle.load(open('data/vocab_train.p', 'rb'))
-        # 将word转化为数字  方便输入网络 进行预测
-        idx2word = sorted(vocab)
-        word2idx = dict(zip(idx2word, range(len(vocab))))
-        print('语料库加载完毕...')
         #添加路径
         if test_gen('data/images/'+image_name) is None:
             return None
