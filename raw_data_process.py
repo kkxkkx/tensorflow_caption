@@ -87,7 +87,8 @@ def process(path):
                 if last_text[-4:] == '.jpg':
                     word = caption.ImageCaption(last_text)
                     img += last_text + ' '
-                    session += clean_text(word)
+                    if word is not None:
+                        session += clean_text(word)
                     # session += '<img>'
                 else:
                     img += 'NULL' + ' '
@@ -96,7 +97,8 @@ def process(path):
                 if text[-4:] == '.jpg':
                     word = caption.ImageCaption(text)
                     img += text
-                    session += '\t' + clean_text(word) + '\t'
+                    if word is not None:
+                        session += '\t' + clean_text(word) + '\t'
                     # session += '\t' + '<img>' + '\t'
                 else:
                     img += 'NULL'
@@ -106,7 +108,9 @@ def process(path):
             elif last_sid != sid:
                 # 开启新对话，把last作为target写入
                 if last_text[-4:] == '.jpg':
-                    session = session[:-4] + '\t' + clean_text(caption.ImageCaption(last_text)) + '\t'
+                    word=caption.ImageCaption(last_text)
+                    if word is not None:
+                        session = session[:-4] + '\t' + clean_text(word) + '\t'
                     #session = session[:-4] + '\t' + '<img>' + '\t'
                 else:
                     session = session[:-4] + '\t' + clean_text(last_text) + '\t'
@@ -117,8 +121,10 @@ def process(path):
             else:
                 # 未开启新对话，录入last
                 if last_text[-4:] == '.jpg':
+                    word=caption.ImageCaption(last_text)
                     img += last_text + ' '
-                    session += clean_text(caption.ImageCaption(last_text)) + '</s>'
+                    if word is not None:
+                        session += clean_text(word) + '</s>'
                     #session += '<img>' + '</s>'
                 else:
                     img += 'NULL' + ' '

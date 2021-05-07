@@ -90,7 +90,8 @@ class Caption(object):
         word2idx = dict(zip(idx2word, range(len(vocab))))
         print('语料库加载完毕...')
         #添加路径
-        test_gen('data/images/'+image_name)
+        if test_gen('data/images/'+image_name) is None:
+            return None
 
         # # 加载测试图片
         encoding_test = pickle.load(open('data/encoded_' + image_name + '_images.p', 'rb'))

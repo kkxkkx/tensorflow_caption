@@ -85,6 +85,8 @@ def encode_images(usage, image_name):
     #         filename = os.path.join(image_folder, image_name)
     # keras读取图片，并且将图片调整为224*224
     img = load_img(image_name, target_size=(img_rows, img_cols))
+    if img is None:
+        return None
     # 将图片转为矩阵
     img_array = img_to_array(img)
     # 使用keras内置的preprocess_input进行图片预处理，默认使用caffe模式去均值中心化
@@ -260,4 +262,4 @@ if __name__ == '__main__':
 
 
 def test_gen(image_name):
-    encode_images('test_a', image_name)
+    return encode_images('test_a', image_name)
