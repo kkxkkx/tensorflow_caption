@@ -1,0 +1,5 @@
+*.h5
+*.idea
+#Directories
+data/
+models/
