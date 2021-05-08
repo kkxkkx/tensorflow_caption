@@ -69,7 +69,7 @@ def encode_images(usage, image_name):
     # num_batches = int(np.ceil(len(names) / float(batch_size)))
 
     # 输出编码过程
-    print('ResNet50提取特征中...')
+    #print('ResNet50提取特征中...')
     # 对每个batche进行处理，使用tqdm库显示处理进度
     # for idx in range(num_batches):
     #     #该批次开始的位置

@@ -92,8 +92,9 @@ class Caption(object):
     def ImageCaption(self, image_name):
         #添加路径
         if test_gen(image_name) is None:
+            print('No images')
             return None
-
+        print('开始Caption')
         # # 加载测试图片
         encoding_test = pickle.load(open('data/encoded_images/encoded_' + image_name + '_images.p', 'rb'))
         # # 随机取测试图片
