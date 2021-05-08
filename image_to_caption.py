@@ -92,7 +92,6 @@ class Caption(object):
     def ImageCaption(self, image_name):
         #添加路径
         if test_gen(image_name) is None:
-            print('No images')
             return None
         print('开始Caption')
         # # 加载测试图片
