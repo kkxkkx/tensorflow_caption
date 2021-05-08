@@ -95,7 +95,7 @@ class Caption(object):
             return None
 
         # # 加载测试图片
-        encoding_test = pickle.load(open('data/encoded_' + image_name + '_images.p', 'rb'))
+        encoding_test = pickle.load(open('data/encoded_images/encoded_' + image_name + '_images.p', 'rb'))
         # # 随机取测试图片
         # names = [f for f in encoding_test.keys()]
         # samples = names

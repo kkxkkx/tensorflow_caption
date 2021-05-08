@@ -109,7 +109,7 @@ def encode_images(usage, image_name):
 
 
     # 用相应的类别命名
-    filename = 'data/encoded_{}_images.p'.format(image_name)
+    filename = 'data/encoded_images/encoded_{}_images.p'.format(image_name)
     # 使用python的pickle模块把数据进行序列化，把encoing保存到filename中
     with open(filename, 'wb') as encoded_pickle:
         pickle.dump(encoding, encoded_pickle)
