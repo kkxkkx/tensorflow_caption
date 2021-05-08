@@ -141,7 +141,8 @@ if __name__ == '__main__':
             pickle.dump(obj, f)
 
     vocab = Vocab(lang="zh")
-    for split_type, conversations, images in [('train', train, train_img), ('dev', dev, dev_img)]:
+    #修改到一个空的路径
+    for split_type, conversations, images in [('train_empty', train, train_img), ('dev', dev, dev_img)]:
         print(f'Processing {split_type} dataset...')
         split_data_dir = datasets_dir.joinpath(split_type)
         split_data_dir.mkdir(exist_ok=True)
