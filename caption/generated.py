@@ -112,7 +112,7 @@ def encode_images(usage, image_name, tag):
     # 使用python的pickle模块把数据进行序列化，把encoing保存到filename中
     with open(filename, 'wb') as encoded_pickle:
         pickle.dump(encoding, encoded_pickle)
-    print('ResNet50提取特征完毕...')
+    #print('ResNet50提取特征完毕...')
 
 
 # 处理数据集的标注部分，生成训练集的词库
