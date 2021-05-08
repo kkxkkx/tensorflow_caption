@@ -81,8 +81,8 @@ def process(path, tag):
 
             sid = line[0]
             text = line[3]
-            print('sid:' + sid)
-            print('text:' + text)
+            # print('sid:' + sid)
+            # print('text:' + text)
             if i == data_size - 1:
                 # 读完了，全部写入
                 if last_text[-4:] == '.jpg':
