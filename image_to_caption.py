@@ -27,17 +27,17 @@ class Caption(object):
         model_weights_path = os.path.join('models', best_model)
         print('模型加载中...')
         # 创建模型
-        model = build_model()
+        self.model = build_model()
         # 加载模型权重
-        model.load_weights(model_weights_path)
+        self.model.load_weights(model_weights_path)
         print('模型加载完毕...')
 
-        print(model.summary())
+        print(self.model.summary())
         # 加载语料库
         vocab = pickle.load(open('data/vocab_train.p', 'rb'))
         # 将word转化为数字  方便输入网络 进行预测
-        idx2word = sorted(vocab)
-        word2idx = dict(zip(idx2word, range(len(vocab))))
+        self.idx2word = sorted(vocab)
+        self.word2idx = dict(zip(self.idx2word, range(len(vocab))))
         print('语料库加载完毕...')
 
     # 使用训练好的模型对图片进行测试
@@ -108,7 +108,7 @@ class Caption(object):
         image_input = np.zeros((1, 2048))
         image_input[0] = encoding_test[image_name]
         # 获取图片的名称
-        filename = os.path.join(test_a_image_folder, image_name)
+        filename = os.path.join('data/'+tag+'/', image_name)
         # print('Start processing image: {}'.format(filename))
         # 设置不同的预测参数，并放到beam_search_predictions中进行预测
         print('描述的图片为:', image_name)
@@ -125,9 +125,8 @@ class Caption(object):
         # print('Beam Search, k=5:',candidate3)
         # sentences.append(candidate3)
 
-        candidate4 = self.beam_search_predictions(model, image_name, word2idx, idx2word, encoding_test,
+        candidate4 = self.beam_search_predictions(self.model, image_name, self.word2idx, self.idx2word, encoding_test,
                                                   beam_index=7)
-        print(candidate4)
         sentences.append(image_name + candidate4)
 
         # 读取图片
@@ -137,7 +136,7 @@ class Caption(object):
         if not os.path.exists('images'):
             os.makedirs('images')
         # 将修改后的图片重新写回
-        cv.imwrite('images/{}_bs_image.jpg'.format(image_name), img)
+        #cv.imwrite('images/{}_bs_image.jpg'.format(image_name), img)
 
         # 将预测产生的描述信息输出到demo.txt文件中
         with open('demo.txt', 'w') as file:

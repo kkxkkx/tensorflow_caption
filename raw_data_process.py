@@ -62,7 +62,7 @@ def clean_text(text):
 
 
 def process(path, tag):
-    with open(path, 'r') as f:
+    with open(path, 'r',encoding='utf-8') as f:
         lines = f.readlines()
     data_size = len(lines)
     img = ''
@@ -72,7 +72,7 @@ def process(path, tag):
 
     caption = Caption()
 
-    with open('./data/' + path.split('_')[-1], 'w') as f:
+    with open('./data/' + path.split('_')[-1], 'w',encoding='utf-8') as f:
         for i in range(1, data_size):
             line = lines[i]
 
