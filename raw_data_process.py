@@ -81,13 +81,15 @@ def process(path, tag):
 
             sid = line[0]
             text = line[3]
-
+            print('sid:' + sid)
+            print('text:' + text)
             if i == data_size - 1:
                 # 读完了，全部写入
                 if last_text[-4:] == '.jpg':
                     word = caption.ImageCaption(last_text, tag)
                     img += last_text + ' '
                     if word is not None:
+                        print('word:' + word)
                         session += clean_text(word)
                     # session += '<img>'
                 else:
@@ -98,6 +100,7 @@ def process(path, tag):
                     word = caption.ImageCaption(text, tag)
                     img += text
                     if word is not None:
+                        print('word:' + word)
                         session += '\t' + clean_text(word) + '\t'
                     # session += '\t' + '<img>' + '\t'
                 else:
@@ -108,8 +111,9 @@ def process(path, tag):
             elif last_sid != sid:
                 # 开启新对话，把last作为target写入
                 if last_text[-4:] == '.jpg':
-                    word = caption.ImageCaption(last_text,tag)
+                    word = caption.ImageCaption(last_text, tag)
                     if word is not None:
+                        print('word:' + word)
                         session = session[:-4] + '\t' + clean_text(word) + '\t'
                     # session = session[:-4] + '\t' + '<img>' + '\t'
                 else:
@@ -121,9 +125,10 @@ def process(path, tag):
             else:
                 # 未开启新对话，录入last
                 if last_text[-4:] == '.jpg':
-                    word = caption.ImageCaption(last_text,tag)
+                    word = caption.ImageCaption(last_text, tag)
                     img += last_text + ' '
                     if word is not None:
+                        print('word:' + word)
                         session += clean_text(word) + '</s>'
                     # session += '<img>' + '</s>'
                 else:
