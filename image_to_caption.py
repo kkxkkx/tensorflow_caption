@@ -32,7 +32,7 @@ class Caption(object):
         model.load_weights(model_weights_path)
         print('模型加载完毕...')
 
-        # print(model.summary())
+        print(model.summary())
         # 加载语料库
         vocab = pickle.load(open('data/vocab_train.p', 'rb'))
         # 将word转化为数字  方便输入网络 进行预测
