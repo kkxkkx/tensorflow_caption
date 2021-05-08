@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import imghdr
 import sys
 
 sys.path.insert(0, 'src')
@@ -84,8 +85,10 @@ def encode_images(usage, image_name):
              #提取路径名称
     #         filename = os.path.join(image_folder, image_name)
     # keras读取图片，并且将图片调整为224*224
-    img = load_img(image_name, target_size=(img_rows, img_cols))
-    if img is None:
+    img_path = os.path.join('data/images/', image_name)
+    if imghdr.what(img_path):
+        img = load_img(image_name, target_size=(img_rows, img_cols))
+    else:
         return None
     # 将图片转为矩阵
     img_array = img_to_array(img)
