@@ -2,6 +2,8 @@
 import imghdr
 import sys
 
+from PIL.ImageFile import ImageFile
+
 sys.path.insert(0, 'src')
 import json
 import pickle
@@ -86,6 +88,7 @@ def encode_images(usage, image_name, tag):
     #         filename = os.path.join(image_folder, image_name)
     # keras读取图片，并且将图片调整为224*224
     img_path = os.path.join('data/' + tag + '/', image_name)
+    ImageFile.LOAD_TRUNCATED_IMAGES = True
     if os.path.isfile(img_path):
         img = load_img(img_path, target_size=(img_rows, img_cols))
     else:
