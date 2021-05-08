@@ -86,8 +86,8 @@ def encode_images(usage, image_name):
     #         filename = os.path.join(image_folder, image_name)
     # keras读取图片，并且将图片调整为224*224
     img_path = os.path.join('data/images/', image_name)
-    if imghdr.what(img_path):
-        img = load_img(image_name, target_size=(img_rows, img_cols))
+    if os.path.isfile(img_path):
+        img = load_img(img_path, target_size=(img_rows, img_cols))
     else:
         return None
     # 将图片转为矩阵
