@@ -61,7 +61,7 @@ def clean_text(text):
     return text
 
 
-def process(path):
+def process(path, tag):
     with open(path, 'r') as f:
         lines = f.readlines()
     data_size = len(lines)
@@ -85,7 +85,7 @@ def process(path):
             if i == data_size - 1:
                 # 读完了，全部写入
                 if last_text[-4:] == '.jpg':
-                    word = caption.ImageCaption(last_text)
+                    word = caption.ImageCaption(last_text, tag)
                     img += last_text + ' '
                     if word is not None:
                         session += clean_text(word)
@@ -95,7 +95,7 @@ def process(path):
                     session += clean_text(last_text)
 
                 if text[-4:] == '.jpg':
-                    word = caption.ImageCaption(text)
+                    word = caption.ImageCaption(text, tag)
                     img += text
                     if word is not None:
                         session += '\t' + clean_text(word) + '\t'
@@ -108,10 +108,10 @@ def process(path):
             elif last_sid != sid:
                 # 开启新对话，把last作为target写入
                 if last_text[-4:] == '.jpg':
-                    word=caption.ImageCaption(last_text)
+                    word = caption.ImageCaption(last_text,tag)
                     if word is not None:
                         session = session[:-4] + '\t' + clean_text(word) + '\t'
-                    #session = session[:-4] + '\t' + '<img>' + '\t'
+                    # session = session[:-4] + '\t' + '<img>' + '\t'
                 else:
                     session = session[:-4] + '\t' + clean_text(last_text) + '\t'
                 f.write(session + img + '\n')
@@ -121,11 +121,11 @@ def process(path):
             else:
                 # 未开启新对话，录入last
                 if last_text[-4:] == '.jpg':
-                    word=caption.ImageCaption(last_text)
+                    word = caption.ImageCaption(last_text,tag)
                     img += last_text + ' '
                     if word is not None:
                         session += clean_text(word) + '</s>'
-                    #session += '<img>' + '</s>'
+                    # session += '<img>' + '</s>'
                 else:
                     img += 'NULL' + ' '
                     session += clean_text(last_text) + '</s>'
@@ -134,7 +134,7 @@ def process(path):
 
 
 if __name__ == '__main__':
-    process('./data/data_dev.txt')
+    process('./data/data_dev.txt', 'dev')
     print('dev done!')
-    process('./data/data_train.txt')
+    process('./data/data_train.txt', 'train')
     print('train done!')

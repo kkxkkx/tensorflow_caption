@@ -89,13 +89,13 @@ class Caption(object):
         final_caption = ''.join(final_caption[1:])
         return final_caption
 
-    def ImageCaption(self, image_name):
-        #添加路径
-        if test_gen(image_name) is None:
+    def ImageCaption(self, image_name, tag):
+        # 添加路径
+        if test_gen(image_name, tag) is None:
             return None
         print('开始Caption')
         # # 加载测试图片
-        encoding_test = pickle.load(open('data/encoded_images/encoded_' + image_name + '_images.p', 'rb'))
+        encoding_test = pickle.load(open('data/' + tag + '/encoded_images/encoded_' + image_name + '_images.p', 'rb'))
         # # 随机取测试图片
         # names = [f for f in encoding_test.keys()]
         # samples = names

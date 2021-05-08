@@ -47,7 +47,7 @@ def extract(folder):
 
 
 # 将图像文件编码
-def encode_images(usage, image_name):
+def encode_images(usage, image_name, tag):
     encoding = {}
     # #编码训练集
     # if usage == 'train':
@@ -69,7 +69,7 @@ def encode_images(usage, image_name):
     # num_batches = int(np.ceil(len(names) / float(batch_size)))
 
     # 输出编码过程
-    #print('ResNet50提取特征中...')
+    # print('ResNet50提取特征中...')
     # 对每个batche进行处理，使用tqdm库显示处理进度
     # for idx in range(num_batches):
     #     #该批次开始的位置
@@ -82,10 +82,10 @@ def encode_images(usage, image_name):
     #     for i_batch in range(length):
     #         #提取图片名称
     #         image_name = names[i + i_batch]
-             #提取路径名称
+    # 提取路径名称
     #         filename = os.path.join(image_folder, image_name)
     # keras读取图片，并且将图片调整为224*224
-    img_path = os.path.join('data/images/', image_name)
+    img_path = os.path.join('data/' + tag + '/', image_name)
     if os.path.isfile(img_path):
         img = load_img(img_path, target_size=(img_rows, img_cols))
     else:
@@ -107,9 +107,8 @@ def encode_images(usage, image_name):
     # 把预测结果保存到encoding中
     encoding[image_name] = preds[0]
 
-
     # 用相应的类别命名
-    filename = 'data/encoded_images/encoded_{}_images.p'.format(image_name)
+    filename = 'data/'+tag+'/encoded_images/encoded_{}_images.p'.format(image_name)
     # 使用python的pickle模块把数据进行序列化，把encoing保存到filename中
     with open(filename, 'wb') as encoded_pickle:
         pickle.dump(encoding, encoded_pickle)
@@ -264,5 +263,5 @@ if __name__ == '__main__':
         build_samples('valid')
 
 
-def test_gen(image_name):
-    return encode_images('test_a', image_name)
+def test_gen(image_name, tag):
+    return encode_images('test_a', image_name, tag)
