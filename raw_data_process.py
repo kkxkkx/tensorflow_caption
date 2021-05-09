@@ -72,7 +72,7 @@ def process(path, tag):
 
     caption = Caption()
 
-    with open('./data/' + path.split('_')[-1], 'w', encoding='utf-8') as f:
+    with open('./data/' + path.split('_')[-1], 'w') as f:
         for i in range(1, data_size):
             line = lines[i]
 
@@ -87,10 +87,11 @@ def process(path, tag):
                 # 读完了，全部写入
                 if last_text[-4:] == '.jpg':
                     word = caption.ImageCaption(last_text, tag)
-                    img += last_text + ' '
                     if word is not None:
                         print('word:' + word)
                         session += clean_text(word)
+                    else:
+                        img += 'NULL' + ' '
                     # session += '<img>'
                 else:
                     img += 'NULL' + ' '
@@ -98,15 +99,16 @@ def process(path, tag):
 
                 if text[-4:] == '.jpg':
                     word = caption.ImageCaption(text, tag)
-                    img += text
                     if word is not None:
                         print('word:' + word)
                         session += '\t' + clean_text(word) + '\t'
+                    else:
+                        img += 'NULL'
                     # session += '\t' + '<img>' + '\t'
                 else:
                     img += 'NULL'
                     session += '\t' + clean_text(text) + '\t'
-                f.write(session + '\n')
+                f.write(session + img + '\n')
 
             elif last_sid != sid:
                 # 开启新对话，把last作为target写入
@@ -118,7 +120,7 @@ def process(path, tag):
                     # session = session[:-4] + '\t' + '<img>' + '\t'
                 else:
                     session = session[:-4] + '\t' + clean_text(last_text) + '\t'
-                f.write(session + '\n')
+                f.write(session + img + '\n')
                 session = ''
                 img = ''
 
@@ -130,6 +132,8 @@ def process(path, tag):
                     if word is not None:
                         print('word:' + word)
                         session += clean_text(word) + '</s>'
+                    else:
+                        img += 'NULL' + ' '
                     # session += '<img>' + '</s>'
                 else:
                     img += 'NULL' + ' '
