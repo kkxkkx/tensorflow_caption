@@ -72,7 +72,7 @@ def process(path, tag):
 
     caption = Caption()
 
-    with open('./data/' + path.split('_')[-1], 'w') as f:
+    with open('./data/' + path.split('_')[-1], 'w', encoding='utf-8') as f:
         for i in range(1, data_size):
             line = lines[i]
 
@@ -91,8 +91,7 @@ def process(path, tag):
                         print('word:' + word)
                         session += clean_text(word)
                     else:
-                        img += 'NULL' + ' '
-                    # session += '<img>'
+                        session += 'NULL'
                 else:
                     img += 'NULL' + ' '
                     session += clean_text(last_text)
@@ -103,8 +102,7 @@ def process(path, tag):
                         print('word:' + word)
                         session += '\t' + clean_text(word) + '\t'
                     else:
-                        img += 'NULL'
-                    # session += '\t' + '<img>' + '\t'
+                        session += '\t' + 'NULL' + '\t'
                 else:
                     img += 'NULL'
                     session += '\t' + clean_text(text) + '\t'
@@ -117,7 +115,8 @@ def process(path, tag):
                     if word is not None:
                         print('word:' + word)
                         session = session[:-4] + '\t' + clean_text(word) + '\t'
-                    # session = session[:-4] + '\t' + '<img>' + '\t'
+                    else:
+                        session = session[:-4] + '\t' + 'NULL' + '\t'
                 else:
                     session = session[:-4] + '\t' + clean_text(last_text) + '\t'
                 f.write(session + img + '\n')
@@ -128,13 +127,11 @@ def process(path, tag):
                 # 未开启新对话，录入last
                 if last_text[-4:] == '.jpg':
                     word = caption.ImageCaption(last_text, tag)
-                    img += last_text + ' '
                     if word is not None:
                         print('word:' + word)
                         session += clean_text(word) + '</s>'
                     else:
-                        img += 'NULL' + ' '
-                    # session += '<img>' + '</s>'
+                        session += 'NULL' + '</s>'
                 else:
                     img += 'NULL' + ' '
                     session += clean_text(last_text) + '</s>'

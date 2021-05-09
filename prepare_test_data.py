@@ -23,11 +23,8 @@ def load_conversations(fileName, spliter="</s>"):
                 continue
             fs = line.split("\t")
             # print(fs)
-            print(len(fs))
             if len(fs) != 3:
                 print("error line", line)
-                for i in range(0, len(fs) - 1):
-                    print(fs[i])
                 continue
             context, response = fs[0].strip(), fs[1].strip()
             utterances = context.split(spliter)
