@@ -62,7 +62,7 @@ def clean_text(text):
 
 
 def process(path, tag):
-    with open(path, 'r',encoding='utf-8') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     data_size = len(lines)
     img = ''
@@ -72,7 +72,7 @@ def process(path, tag):
 
     caption = Caption()
 
-    with open('./data/' + path.split('_')[-1], 'w',encoding='utf-8') as f:
+    with open('./data/' + path.split('_')[-1], 'w', encoding='utf-8') as f:
         for i in range(1, data_size):
             line = lines[i]
 
@@ -106,7 +106,7 @@ def process(path, tag):
                 else:
                     img += 'NULL'
                     session += '\t' + clean_text(text) + '\t'
-                f.write(session + img + '\n')
+                f.write(session + '\n')
 
             elif last_sid != sid:
                 # 开启新对话，把last作为target写入
@@ -118,7 +118,7 @@ def process(path, tag):
                     # session = session[:-4] + '\t' + '<img>' + '\t'
                 else:
                     session = session[:-4] + '\t' + clean_text(last_text) + '\t'
-                f.write(session + img + '\n')
+                f.write(session + '\n')
                 session = ''
                 img = ''
 
