@@ -5,7 +5,7 @@ from utils_tf import bleu
 
 def load_data(param):
     data = []
-    # with open('D:/Learn/four/graduate/baseline/nlp/jddc2020_baseline/mhred/tensorflow_caption/data/' + param, 'r',
+    #with open('D:/Learn/four/graduate/baseline/nlp/jddc2020_baseline/mhred/tensorflow_caption/data/' + param, 'r',
     with open('./data/' + param, 'r',
               encoding='utf-8') as f:
         lines = f.readlines()
@@ -29,4 +29,4 @@ if __name__ == '__main__':
             max_order,
             smooth)
         sum += bleu_score
-    print('bleu:{}'.format(sum/data_size))
+    print('bleu:{}'.format(round(sum/data_size,4)))
