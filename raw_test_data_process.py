@@ -1,0 +1,144 @@
+import re
+import jieba
+from image_to_caption import Caption
+
+pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+pattern_css = re.compile(r'<.+>')
+pattern_pun = '！，；：？、。"!,;:?."\''
+
+
+def tokenize_spt(text):
+    sp_token = ['<img>', '<url>', '<sos>', '<eos>']
+
+    resp_list = list()
+    tmp_list = jieba.cut(text, cut_all=False)
+
+    seg_list = list(tmp_list)
+    i = 0
+
+    while i < len(seg_list):
+        if ''.join(seg_list[i:i + 3]) in sp_token:
+            resp_list.append(''.join(seg_list[i:i + 3]))
+            i = i + 3
+        else:
+            resp_list.append(''.join(seg_list[i]))
+            i = i + 1
+
+    return resp_list
+
+
+def clean_css(text):
+    url_list = re.findall(pattern_css, text)
+    for url in url_list:
+        text = text.replace(url, '')
+
+    return text
+
+
+def clean_sentence(text):
+    text = text.replace('未购买→售前咨询组', '')
+    text = text.replace('已购买→售后咨询组', '')
+    text = text.replace(' ||| ', '')
+
+    img = "NULL"
+    url_list = re.findall(pattern, text)
+    for url in url_list:
+        text = text.replace(url, '<url>')
+
+    return text
+
+
+def clean_punctuation(text):
+    text = re.sub(r'[{}]+'.format(pattern_pun), '', text)
+    return text.strip().lower()
+
+
+def clean_text(text):
+    text = clean_css(text)
+    text = clean_sentence(text)
+    text = clean_punctuation(text)
+    text = ' '.join(tokenize_spt(text))
+    return text
+
+
+def process(path, tag):
+    with open(path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    data_size = len(lines)
+    img = ''
+    session = ''
+    last_sid = lines[0].strip().split('\t')[0]
+    last_text = lines[0].strip().split('\t')[3]
+
+    caption = Caption()
+
+    with open('./data/' + path.split('_')[-1], 'w', encoding='utf-8') as f:
+        for i in range(1, data_size):
+            line = lines[i]
+
+            line = line.strip()
+            line = line.split('\t')
+
+            sid = line[0]
+            text = line[3]
+            # print('sid:' + sid)
+            # print('text:' + text)
+            if i == data_size - 1:
+                # 读完了，全部写入
+                if last_text[-4:] == '.jpg':
+                    word = caption.ImageCaption(last_text, tag)
+                    if word is not None:
+                        print('word:' + word)
+                        session += clean_text(word)
+                    else:
+                        session += 'NULL'
+                else:
+                    img += 'NULL' + ' '
+                    session += clean_text(last_text)
+
+                if text[-4:] == '.jpg':
+                    word = caption.ImageCaption(text, tag)
+                    if word is not None:
+                        print('word:' + word)
+                        session += '\t' + clean_text(word) + '\t'
+                    else:
+                        session += '\t' + 'NULL' + '\t'
+                else:
+                    img += 'NULL'
+                    session += '\t' + clean_text(text) + '\t'
+                f.write(session + img + '\n')
+
+            elif last_sid != sid:
+                # 开启新对话，把last作为target写入
+                if last_text[-4:] == '.jpg':
+                    word = caption.ImageCaption(last_text, tag)
+                    if word is not None:
+                        print('word:' + word)
+                        session = session[:-4] + '\t' + clean_text(word) + '\t'
+                    else:
+                        session = session[:-4] + '\t' + 'NULL' + '\t'
+                else:
+                    session = session[:-4] + '\t' + clean_text(last_text) + '\t'
+                f.write(session + img + '\n')
+                session = ''
+                img = ''
+
+            else:
+                # 未开启新对话，录入last
+                if last_text[-4:] == '.jpg':
+                    word = caption.ImageCaption(last_text, tag)
+                    if word is not None:
+                        print('word:' + word)
+                        session += clean_text(word) + '</s>'
+                    else:
+                        session += 'NULL' + '</s>'
+                else:
+                    img += 'NULL' + ' '
+                    session += clean_text(last_text) + '</s>'
+            last_sid = sid
+            last_text = text
+
+
+if __name__ == '__main__':
+    process('./data/data_test.txt', 'test')
+    print('test done!')
